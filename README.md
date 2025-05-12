@@ -14,3 +14,20 @@ Masalah prediksi penjualan perlu diselesaikan karena kesalahan estimasi dapat me
 
 ### Refrensi
 O. O. Mustapha and T. Sithole, “Forecasting retail sales using machine learning models,” *Am. J. Stat. Actuar. Sci.*, vol. 6, no. 1, pp. 35–67, Jan. 2025, doi: [10.47672/ajsas.2679](https://doi.org/10.47672/ajsas.2679).
+
+## 🎽 Bussines Understanding
+
+Dalam bisnis ritel, kemampuan untuk memprediksi penjualan secara akurat sangat penting untuk pengambilan keputusan strategis, seperti pengelolaan stok, penjadwalan karyawan, dan perencanaan promosi. Rossmann, sebagai jaringan toko ritel, memiliki data penjualan historis yang kaya dan dilengkapi dengan informasi promosi, tipe toko, serta keberadaan kompetitor yang dapat dimanfaatkan untuk membangun model prediktif.
+
+### Problem Statement
+- Bagaimana memprediksi nilai penjualan harian pada toko ritel dengan mempertimbangkan berbagai fitur?
+
+### Goals
+- Membangun model machine learning yang mampu memprediksi penjualan harian toko secara akurat.
+- Mengidentifikasi fitur-fitur yang paling berpengaruh terhadap penjualan, seperti pengaruh promosi dan kompetitor.
+
+### Solution Approach
+
+#### Solution Statements
+- **Random Forest Regressor :** Algoritma ensemble mampu menangani data numerik dan kategorikal, serta memberikan interpretasi melalui feature importance
+- **XGBoost Regressor** : Algoritma gradient boosting yang terbukti sangat akurat untuk data tabular dan sering digunakan dalam kompetisi prediksi, termasuk kasus retail sales.
