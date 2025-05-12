@@ -88,6 +88,7 @@ sumber data : (Kaggle [Rossman Store Sales] : https://www.kaggle.com/datasets/pr
 - Saya melakukan teknik yang umum digunakan untuk encoding fitur kategori yaitu teknik one-hot-encoding. Men-encode tiga variabel yaitu "StoreTyoe", "Assortment", "StateHoliday"
 - Saya tidak melakukan reduksi PCA karena komponen perta (PC1) hampir mencakup seluruh informasi penting dalam data. Dan PC2 hanya menambahkan 0.73% informasi, yang bisa diabaikan.
 - Melakukan spliting test dan train dengan pembagian data 80 : 20.
+- Melakukan standarisasi dengan MinMaxScaler
 
 **Rubik Tambahan**
 ### Encoding
@@ -107,5 +108,44 @@ sumber data : (Kaggle [Rossman Store Sales] : https://www.kaggle.com/datasets/pr
 2. Alasan :
    - Mengevaluasi performa model secara objektif pada data yang belum pernah dilihat (data test).
    - Mencegah overfitting dengan memisahkan data validasi.
+
+### Convert Float ke Int
+1. Proses yang dilakukan :
+   - Mengumpulkan kolom yang memiliki tipe data float dalam variabel kolom_yang_diubah
+   - lalu mengubahnya ke tipe data int dengan fungsi astype() dan disimpan ke dalam dataset sampel.
+2. Alasan  :
+   - Untuk mengubah float ke int agar semua data bertipe int.
   
 ## MODELING
+**TOP Rekomendasi Penjualan Tertinggi Menggunakan XGBoost**
+1. Top 1 terbaik adalah penjualan dengan total 1.147878 pada store 567 
+2. Total Penjualan terendah adalah 0.108608 pada store  510   
+   
+**Terdapat pola kunci naik turunya penjualan**
+- Promo = Penjualan naik
+- Hari Kerja = Penjualan juga naik
+- Kompetitor cukup dekat = lebih menguntungkan
+
+**Rekomendasi Bisnis**
+- Prioritaskan promo di toko dengan performa buruk
+- Fokus stok tambahan ketika menerapkan promo
+
+### Tambahan 
+**Saya menggunakan dua algoritma berbeda yaitu Random Forest dan XGBoost**
+
+**Kekurangan dan Kelebihan Random Forest**
+1. Kekurangan
+   - kurang intuitif untuk rekomendasi
+   - Lebih lambat untuk dataset besar
+2. Kelebihan
+   - Lebih stabil (MSE/RMSE/MAE lebih rendah)
+   - Interpretasi lebih mudah
+  
+**Kekurangan dan Kelebihan XGBoost**
+1. Kelebihan
+   - R2 tinggi (78.1% di test) -> cocok untuk rekomendasi
+   - cepat dan efisien
+   - handle missing value otomatis
+2. Kekurangan
+   - rentan overfitting
+   - butuh tuning hyperparameter
