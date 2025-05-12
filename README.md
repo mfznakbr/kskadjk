@@ -80,4 +80,32 @@ sumber data : (Kaggle [Rossman Store Sales] : https://www.kaggle.com/datasets/pr
 - Distribusi Numeric : disini saya hanya akan fokus pada distribusi fitur sales, dimana terlihat pada awalnya cenderung naik hingga pada titik tertinggi sekitar 1300+ dan turun terus hingga dibawah 200.
 
 ### Multivariate Analysis
+1. Categorical Feature
+   - StoreType 'b' memiliki rata-rata penjualan (Sales) yang lebih tinggi dibandingkan StoreType 'd' (terlihat dari posisi batang/garis yang lebih tinggi untuk 'b').
+   - Jika perbedaan tinggi batang/garis antara 'd' dan 'b' besar, berarti tipe toko ('StoreType') berpengaruh kuat terhadap penjualan.
 
+## 🎰 Data Preparation
+- Saya melakukan teknik yang umum digunakan untuk encoding fitur kategori yaitu teknik one-hot-encoding. Men-encode tiga variabel yaitu "StoreTyoe", "Assortment", "StateHoliday"
+- Saya tidak melakukan reduksi PCA karena komponen perta (PC1) hampir mencakup seluruh informasi penting dalam data. Dan PC2 hanya menambahkan 0.73% informasi, yang bisa diabaikan.
+- Melakukan spliting test dan train dengan pembagian data 80 : 20.
+
+**Rubik Tambahan**
+### Encoding
+1. Proses yang dilakukan (one-hot-encoding) :
+   - One-Hot Encoding: Ubah kolom kategorikal (StateHoliday, StoreType, Assortment) jadi kolom biner (0/1).
+   - Gabung Kolom Baru: Tambahkan kolom hasil encoding ke DataFrame.
+   - Hapus Kolom Asli: Kolom kategorikal lama dihapus karena sudah diencode.
+2. Alasan :
+   - Model machine learning butuh data numerik, bukan kategori (seperti a, b).
+   - Hindari bias ordinal (misal: anggap a=1, b=2 lebih penting padahal tidak).
+   - Biarkan model belajar pola tiap kategori secara terpisah.
+
+### Teknik Spliting
+1. Proses yang dilakukan :
+   - X = sampel.drop('Sales', axis=1) → Semua kolom kecuali Sales sebagai fitur. y = sampel['Sales'] > Kolom Sales sebagai target.
+   - Test 20%: Data uji = 20% dari total, data latih = 80%. random_state=123: Memastikan pembagian sama tiap kali di-run (reproducibility).
+2. Alasan :
+   - Mengevaluasi performa model secara objektif pada data yang belum pernah dilihat (data test).
+   - Mencegah overfitting dengan memisahkan data validasi.
+  
+## MODELING
