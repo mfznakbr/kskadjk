@@ -114,7 +114,16 @@ sumber data : (Kaggle [Rossman Store Sales] : https://www.kaggle.com/datasets/pr
    - lalu mengubahnya ke tipe data int dengan fungsi astype() dan disimpan ke dalam dataset sampel.
 2. Alasan  :
    - Untuk mengubah float ke int agar semua data bertipe int.
-  
+
+### MinMaxScaller 
+1. Proses yang dilakukan.
+   MinMaxScaler mengubah skala fitur agar berada dalam rentang tertentu, biasanya antara 0 dan 1. Caranya:
+   - Hitung nilai minimum dan maksimum dari setiap fitur dalam dataset.
+   - Untuk setiap nilai fitur, kurangi dengan nilai minimum fitur tersebut.
+   - Kemudian, bagi hasilnya dengan selisih antara nilai maksimum dan minimum fitur tersebut.
+2. Alasan :
+   Menyamakan Skala: Fitur dengan rentang nilai yang berbeda dapat membingungkan algoritma ML. MinMaxScaler memastikan semua fitur memiliki skala yang sama.
+   
 ## MODELING
 **TOP Rekomendasi Penjualan Tertinggi Menggunakan XGBoost**
 1. Top 1 terbaik adalah penjualan dengan total 1.147878 pada store 567 
