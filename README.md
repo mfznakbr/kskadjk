@@ -20,11 +20,10 @@ O. O. Mustapha and T. Sithole, “Forecasting retail sales using machine learnin
 Dalam bisnis ritel, kemampuan untuk memprediksi penjualan secara akurat sangat penting untuk pengambilan keputusan strategis, seperti pengelolaan stok, penjadwalan karyawan, dan perencanaan promosi. Rossmann, sebagai jaringan toko ritel, memiliki data penjualan historis yang kaya dan dilengkapi dengan informasi promosi, tipe toko, serta keberadaan kompetitor yang dapat dimanfaatkan untuk membangun model prediktif.
 
 ### Problem Statement
-- Bagaimana memprediksi nilai penjualan harian pada toko ritel dengan mempertimbangkan berbagai fitur?
+- Bagaimana memprediksi nilai penjualan harian pada toko ritel dengan mempertimbangkan fitur yang tersedia?
 
 ### Goals
-- Membangun model machine learning yang mampu memprediksi penjualan harian toko secara akurat.
-- Mengidentifikasi fitur-fitur yang paling berpengaruh terhadap penjualan, seperti pengaruh promosi dan kompetitor.
+- Membangun model machine learning yang mampu memprediksi penjualan harian toko.
 
 ### Solution Approach
 
@@ -149,3 +148,76 @@ sumber data : (Kaggle [Rossman Store Sales] : https://www.kaggle.com/datasets/pr
 2. Kekurangan
    - rentan overfitting
    - butuh tuning hyperparameter
+  
+## EVALUATION
+Dalam evaluasi model prediksi penjualan harian, beberapa metrik evaluasi digunakan untuk mengukur performa model yang dibangun. Beberapa metrik ini dipilih karena relevansinya dalam konteks prediksi nilai kontinu (yang dalam hal ini, penjualan) dan kemampuan memberikan wawasan berbeda tentang kualitas prediksi.
+**Metrik Yang Digunakan** : 
+- Mean Squared Error (MSE)
+- Mean Absolute Error (MAE)
+- R-squared (Koefisien Determinasi)
+
+**Hasil Evaluasi Proyek :**
+Berdasarkan evaluasi pada data train dan test, performa kedua model sebagai berikut : 
+Random Forest Regressor:
+- Train MSE: 0.00138
+- Test MSE: 0.01001
+- Train MAE: 0.02694
+- Test MAE: 0.07393
+- Train R-squared: 0.9606
+- Test R-squared: 0.7199
+
+XGBoost Regressor:
+- Train MSE: 0.00622
+- Test MSE: 0.00782
+- Train MAE: 0.05933
+- Test MAE: 0.06671
+- Train R-squared: 0.8221
+- Test R-squared: 0.7812
+
+**Interpretasi Hasil :**
+1. Performa Error (MSE dan MAE):
+   - Random forest menunjukan performa sangat baik pada train dengan nilai MSE dan MAE sangat rendah. Namun, terdapat peningkatan error signifikan pada data test, terindikasi adanya overfit
+   - XGBoost memiliki nilai MSE dan MAE lebih stabil antara data train dan test, berarti model dapat melakukan generalisasi dengan baik.
+2. R-squared :
+   - Random forest mampu mendapat sebagian besar variabilitas data train mencapai 0.96, tetapi tidak berbeda dengan sebelumnya pada R-squared Random Forest juga terindikasi overfit karena pada data test hanya mencapai 0.71
+   - XGBoost mungkin tidak setinggi Random Forest pada train dimana XGBoost hanya mencapai 0.82, namun lebih stabil dimana pada data test 0.78, menunjukan kemampuan baik dalam menangkap pola data.
+  
+**Kesimpulan**
+Berdasarkan metrik evaluasi yang digunakan, XGBoost dapat dianggap sebagai model lebih baik dan stabil dalam konteks ini, karena kemampuannya untuk memberikan prediksi akurat dan konsisten pada data yang belum pernah dilihat sebelumnya.
+
+Metrik yang dipilih juga sesuai dengan problem statement dimana MSE/MAE langsung mengukur seberapa jauh prediksi menyimpang dari nilai aktual penjualan. Sesuai untuk masalah regresi numerik seperti prediksi penjualan. R2 menjelaskan seberapa baik model memperhitungkan variasi data penjualan harian yang dipengaruhi berbagai fitur pada dataset. Penjualan harian adalah variabel kontinu sehingga butuh metrik regresi (bukan klasifikasi seperti accuracy).
+
+Kemudian, metrik ini dipilih karena MSE memberikan interpretasi langsung ("Rata-rata selisih prediksi dengan aktual"), R2 menunjukan apakah fitur yang digunakan benar-benar mempengaruhi prediksi. Serta membandingkan secara objektif performa dua model yang berbeda (RF vs XGBoost).
+
+**Rubik Tambahan**
+### Metrik Evaluasi yang Digunakan
+Dalam proyek prediksi penjualan harian toko ritel ini, saya menggunakan tiga metrik evaluasi utama:
+
+1. Mean Squared Error (MSE) :
+   - Cara Kerja : MSE mengukur rata - rata dari kuadrat selisih antara nilai penjualan aktual dan nilai penjualan yang diprediksi. Prosesnya adalah :
+     1. Hitung selisih (error) antara setiap nilai aktual dan nilai prediksi.
+     2. Kuadratkan setiap error ini, pengkuadratan memiliki dua tujuan yaitu :
+        * Menghilangkan tanda negatif, sehingga error positif dan negatif tidak saling menghilangkan.
+        * Memberikan bobot yang lebih besar kepada error yang lebih besar. Ini berarti MSE sangat sensitif terhadap prediksi yang jauh meleset.
+      3. Hitung rata - rata dari semua error kuadrat tersebut.
+   - Penjelasan : MSE memberikan gambaran tentang variasi rata-rata dari prediksi model Anda. Nilai MSE yang lebih rendah menunjukkan bahwa prediksi model Anda secara rata-rata lebih dekat ke nilai aktual. Namun, karena MSE dalam satuan kuadrat dari variabel target (misalnya, USD^2 jika targetnya adalah penjualan dalam USD), interpretasi langsung dalam satuan target mungkin kurang intuitif.
+
+2. Mean Absolut Error (MAE):
+   - Cara Kerja :
+     MAE mengukur rata - rata dari nilai absolut selisih antara nilai penjualan aktual dan nilai penjualan prediksi. Prosesnya :
+     1. Hitung selisih (error) antara setiap nilai aktual dan nilai prediksinya.
+     2. Ambil nilai absolut dari setiap error. ini mengubah semua error jadi positif, sehingga kita hanya mempertimbangkan besarnya error, bukan arahnya.
+     3. Hitung rata - rata dari semua nilai absolut error tersebut.
+   - Penjelasan : MAE lebih mudah di interpretasikan dibanding MSE karena berada dalam satuan yang sama dengan variabel target (misalnya, Rp) . MAE sebesar Rp.1000 USD berarti bahwa, rata-rata, prediksi model meleset sebesar Rp.1000 dari nilai penjualan aktual. MAE kurang sensitif terhadap outlier dibandingkan MSE, karena tidak mengkuadratkan error.
+
+3. R-squared (R2) :
+   - Cara Kerja :
+     R-squared mengukur seberapa baik model regresi dalam menjelaskan variabilitas data dependen. Ini membandingkan performa model Saya dengan model *baselline* sederhana yang hanya memprediksi rata - rata nilai target. Prosesnya :
+     1. Hitung total variabilitas data target (SST - Total Sum of Squares). ini mengukur seberapa banyak nilai target bervariasi dari rata-ratanya.
+     2. Hitung variabilitas yang *tidak* dijelaskan oleh model Anda (SSE - Sum of Squared Errors). Ini mengukur seberapa banyak prediksi model saya meleset dari nilai target.
+     3. Hitung proporsi variabilitas yang dijelaskan oleh model. Ini adalah 1 dikurangi rasio SSE terhadap SST.
+    
+   - Penjelasan :
+     * R² mendekati 1: Model menjelaskan sebagian besar variabilitas data. Prediksi model cocok dengan data aktual.
+     * R² mendekati 0 : Model tidak dapat menjelaskan banyak variabilitas data. Model mungkin tidak lebih baik dari sekedar memprediksi rata-rata.
+     * R² bisa negatif : Model sangat buruk dalam memprediksi data.
