@@ -35,61 +35,121 @@ Dalam bisnis ritel, kemampuan untuk memprediksi penjualan secara akurat sangat p
 sumber data : (Kaggle [Rossman Store Sales] : https://www.kaggle.com/datasets/pratyushakar/rossmann-store-sales)
 
 ### Informasi Umum :
-- Jumlah baris (setelah sampling dan dropna) : 29.894
-- Jumlah kolom : 15
+- Jumlah baris (untuk store_df dan train_df) : store_df = 1115 dan train df = 1.017.209
+- Jumlah kolom : store_df = 10 dan train_df = 9
 - Tipe data : Kombinasi numerik, kategorikal, dan waktu
-- Target Variabel : "Sales" (Penjualan harian per toko)
+pada store_df  memiliki 1115 baris dan 10 kolom. Beberapa kolom seperti CompetitionOpenSinceMonth, Promo2SinceWeek, dan PromoInterval memiliki data yang hilang (missing values) yang perlu ditangani pada tahap preprocessing, untuk train_df memiliki 1.017.209 baris dan 9 kolom. Tidak ada missing value. Kolom seperti Sales dan Customers merupakan target dan indikator penting dalam analisis penjualan.
 
 ### Daftar Fitur
-- `Store` : ID unik toko
-- `DayOfWeek` : Hari dalam minggu (1 = Senin, 7 = Minggu)
-- `Sales` : Total penjualan pada hari tertentu (target prediksi)
-- `Promo` : Apakah toko sedang melakukan promosi (1 = Ya, 0 = Tidak)
-- `SchoolHoliday` : Apakah hari tersebut bertepatan dengan libur sekolah
-- `StoreType` : Tipe toko (a, b, c, d)
-- `Assortment` : Tingkat kelengkapan produk (a = basic, b = extra, c = extended)
-- `CompetitionDistance` : Jarak (meter) ke toko pesaing terdekat
-- `Promo2` : Apakah toko ikut serta dalam promosi jangka panjang Promo2
-- `Day`, `Month` : Informasi tanggal dari kolom `Date`
-- `CompetitionOpenSince` : Lama kompetitor telah buka (dalam bulan)
-- `Promo2InMonth` : Apakah bulan saat ini termasuk dalam jadwal promosi (1/0)
-- `PromoMonth` : Apakah saat ini promosi Promo2 sedang aktif (1/0)
+**TRAIN_DF (train_df)**
+| Nama Variabel               | Deskripsi                                                                         |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| `Store`                     | ID unik toko. Digunakan untuk join ke `train.csv`.                                |
+| `StoreType`                 | Tipe toko: `a`, `b`, `c`, `d` (mewakili model bisnis yang berbeda).               |
+| `Assortment`                | Tingkat kelengkapan produk:<br>• `a` = basic<br>• `b` = extra<br>• `c` = extended |
+| `CompetitionDistance`       | Jarak (dalam meter) ke toko pesaing terdekat.                                     |
+| `CompetitionOpenSinceMonth` | Bulan saat kompetitor mulai buka.                                                 |
+| `CompetitionOpenSinceYear`  | Tahun saat kompetitor mulai buka.                                                 |
+| `Promo2`                    | Apakah toko ikut promosi jangka panjang Promo2 (1 = ya, 0 = tidak).               |
+| `Promo2SinceWeek`           | Minggu kalender saat toko mulai ikut Promo2.                                      |
+| `Promo2SinceYear`           | Tahun saat toko mulai ikut Promo2.                                                |
+| `PromoInterval`             | Bulan-bulan saat Promo2 aktif, contoh: `"Feb,May,Aug,Nov"`.                       |
+
+
+**STORE_DF (store_df)**
+| Nama Variabel               | Deskripsi                                                                         |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| `Store`                     | ID unik toko. Digunakan untuk join ke `train.csv`.                                |
+| `StoreType`                 | Tipe toko: `a`, `b`, `c`, `d` (mewakili model bisnis yang berbeda).               |
+| `Assortment`                | Tingkat kelengkapan produk:<br>• `a` = basic<br>• `b` = extra<br>• `c` = extended |
+| `CompetitionDistance`       | Jarak (dalam meter) ke toko pesaing terdekat.                                     |
+| `CompetitionOpenSinceMonth` | Bulan saat kompetitor mulai buka.                                                 |
+| `CompetitionOpenSinceYear`  | Tahun saat kompetitor mulai buka.                                                 |
+| `Promo2`                    | Apakah toko ikut promosi jangka panjang Promo2 (1 = ya, 0 = tidak).               |
+| `Promo2SinceWeek`           | Minggu kalender saat toko mulai ikut Promo2.                                      |
+| `Promo2SinceYear`           | Tahun saat toko mulai ikut Promo2.                                                |
+| `PromoInterval`             | Bulan-bulan saat Promo2 aktif, contoh: `"Feb,May,Aug,Nov"`.                       |
 
 **Rubik Tambahan**
-### Menangani missing value
-- Data missing value menggunakan isna().sum() mencapai 508.031 pada Promo2SinceWeek, dan 2 lainnya.
-- Namun untuk mengatasi missing value tidak dapat langsung menggunakan dropna() karena akan menghilangkan nilai b pada fitur assorment dan storetype.
-- mengindetinfikasi nilai 0 pada kolom sales, jumlah nilai 0 dari sales mencapai 172.871 dan setelah men-Drop nilai 0 pada sales nilai min pada sales itu 46 dan max adalah 41551.
+🔍 Exploratory Data Analysis (EDA)
+Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksploratif terhadap dua fitur kategorikal penting: StoreType dan Assortment.
 
-### Menangani Outliers
-- Disini, saya hanya akan mengatasi outliers pada kolom sales dan competition distance. Karena, kolom lain itu hanya bernilai 0-1, tahun, jadi tidak perlu dilakukan penanganan outlier
-- Untuk mengatasi outlier, saya menggunakan metode IQR dan setelah mengatasi outlier menggunakan IQR jumlah data tersisa 732.741
+🏪 StoreType : 
+| StoreType | Jumlah Toko | Persentase |
+| --------- | ----------- | ---------- |
+| a         | 602         | 53.99%     |
+| d         | 348         | 31.21%     |
+| c         | 148         | 13.27%     |
+| b         | 17          | 1.52%      |
 
-### Data Cleaning
-- Membuat kolom baru yaitu CompetitionOpenSince dari hasil kalkulasi CompetitionOpenSinceYear dan CompetitionOpenSinceMonth. Ini berfungsi untuk mengetahui berapa lama saingan membuka tokonya dalam hitungan bulan.
-- Membuat kolom baru Promo2InMonth dari hasil kalkulasi Promo2SicneYear dan Promo2SinceWeek.
-- Membuat kolom baru PromoMonth hasil maping MonthName dan kolom PromoInterval.
-- Menghapus kolom Open : dilihat dari hasil describe telihat bahwa tidak ada nilai 0 yang menandakan tutup dan juga saya telah menghapus nilai 0 pada sales.
+**Insight :**
+- Mayoritas toko termasuk dalam tipe a. menunjukan tipe ini adalah model toko paling umum digunakan.
+- Tipe b sangat jarang digunakan, ditemukan hanya sekitar 1.5% dari total toko.
 
-### Univariate Analysis
-- melakukan pembagian fitur pada dataset numeric dan categoric
-- Distribusi Stateholiday : didominasi oleh 0 dimana artinya itu bukan hari libur sedangkan hari libur sendiri sangat kecil perbandingannya dengan hari biasa.
-- Distribusi StoreType : jumlah data tertinggi ada pada tipe toko a yaitu 15.878 dan minimal tipe toko b yaitu 479.
-- Distribusi Assorment : jumlah data tertinggi adalah a yaitu 16.278 dan terendah yaitu b 287.
-- Distribusi Numeric : disini saya hanya akan fokus pada distribusi fitur sales, dimana terlihat pada awalnya cenderung naik hingga pada titik tertinggi sekitar 1300+ dan turun terus hingga dibawah 200.
+🛒 Assortment
+| Assortment | Jumlah Toko | Persentase |
+| ---------- | ----------- | ---------- |
+| a          | 593         | 53.18%     |
+| c          | 513         | 46.01%     |
+| b          | 9           | 0.81%      |
 
-### Multivariate Analysis
-1. Categorical Feature
-   - StoreType 'b' memiliki rata-rata penjualan (Sales) yang lebih tinggi dibandingkan StoreType 'd' (terlihat dari posisi batang/garis yang lebih tinggi untuk 'b').
-   - Jika perbedaan tinggi batang/garis antara 'd' dan 'b' besar, berarti tipe toko ('StoreType') berpengaruh kuat terhadap penjualan.
+**Insight :**
+- Tipe a (basic assortment) merupakan yang paling umum digunakan, diikuti oleh c (extended).
+- Tipe b (extra assortment) sangat jarang digunakan, hanya di bawah 1% toko, menunjukkan bahwa hanya sedikit toko yang menawarkan jenis produk lebih banyak dari biasanya.
+
 
 ## 🎰 Data Preparation
-- Saya melakukan teknik yang umum digunakan untuk encoding fitur kategori yaitu teknik one-hot-encoding. Men-encode tiga variabel yaitu "StoreTyoe", "Assortment", "StateHoliday"
-- Saya tidak melakukan reduksi PCA karena komponen perta (PC1) hampir mencakup seluruh informasi penting dalam data. Dan PC2 hanya menambahkan 0.73% informasi, yang bisa diabaikan.
-- Melakukan spliting test dan train dengan pembagian data 80 : 20.
-- Melakukan standarisasi dengan MinMaxScaler
+- Missing Values
+- Hapus nilai 0 pada kolom sales
+- Penanganan Outliers
+- Data Cleaning (Kalkulasi kolom untuk menghasilkan kolom baru)
+- Encoding
+- Teknik Spliting
+- Convert Float ke Int
+- MinMaxScaller
+  
 
 **Rubik Tambahan**
+### Missing Value 
+1. Proses 
+   Metode penanganan missing values bersamaan dengan :
+   - Penanganan Outliers
+   - Hapus nilai 0 pada kolom sales
+   - Data Cleaning
+   - fungsi dropna() setelah **pengambilan sampel data.** 
+2. Alasan : Menangani missing value dengan dropna( ) secara langsung sepertinya tidak tepat untuk dataset ini, jika dipaksakan hasilnya akan seperti ini Assorment : ['a' 'c' nan], StoreType : ['a' 'd' 'c' nan] dimana kehilangan nilai b baik pada Assortment dan StoreType. Oleh karena itu, dropna() diterapkan secara selektif dan setelah proses sampling, guna meminimalkan kehilangan variasi kategori yang penting dalam analisis maupun pemodelan.
+
+### Hapus Nilai 0 Pada Kolom Sales 
+1. Proses :
+   - Baris data yang memiliki nilai penjualan (Sales) sama dengan nol dihapus dari dataset. Ini dilakukan menggunakan teknik filtering untuk memastikan hanya data dengan transaksi penjualan yang valid yang disertakan.
+2. Alasan :
+   - Nilai Sales = 0 biasanya menandakan bahwa toko sedang tutup atau tidak melakukan penjualan pada hari tersebut. Jika data ini tetap digunakan, model dapat belajar dari kondisi yang tidak mencerminkan aktivitas penjualan yang sebenarnya. Menghapusnya membantu meningkatkan akurasi dan relevansi model.
+
+### Penanganan Outliers 
+1. Proses :
+   - Outlier pada kolom numerikal seperti Sales dan CompetitionDistance dideteksi menggunakan metode Interquartile Range (IQR). Nilai-nilai yang berada jauh di bawah atau di atas sebaran umum dihapus dari dataset.
+2. Alasan :
+   - Outlier dapat mempengaruhi distribusi data dan menyebabkan model menjadi bias atau overfitting. Dengan menghapus nilai-nilai ekstrem ini, kualitas data menjadi lebih stabil dan representatif terhadap pola penjualan yang umum terjadi.
+
+### Data Cleaning
+1. Proses :
+   - kolom Date dipecah menjadi fitur numerik baru: Day, Month, dan Year menggunakan .dt
+   - fillna(0) digunakan untuk mengisi nilai missing (NaN) pada kolom CompetitionOpenSinceYear dan CompetitionOpenSinceMonth dengan nilai 0.
+   - Kalkulasi dilakukan dengan menghitung selisih waktu antara tahun dan bulan kompetitor mulai buka (CompetitionOpenSinceYear dan CompetitionOpenSinceMonth) dengan waktu transaksi (Year dan Month) pada data.
+   - Dibuat fitur baru bernama Promo2InMonth yang menghitung lama waktu (dalam bulan) sejak toko mulai berpartisipasi dalam promosi jangka panjang Promo2.
+   - Map angka bulan ke nama bulan (1 → 'Jan', dst).Bandingkan nama bulan transaksi (MonthName) dengan daftar bulan pada kolom PromoInterval.
+   - Diambil 30.000 baris data secara acak menggunakan .sample() untuk mengurangi beban komputasi saat eksplorasi atau eksperimen awal.
+   - Menghapus sisa missing value pada data sampel menggunakan fungsi dropna()
+2. Alasan:
+   - Memecah Date menjadi fitur waktu terpisah seperti hari, bulan, dan tahun membantu model dalam menangkap pola musiman atau tren waktu dalam data penjualan.
+   - Karena banyak nilai yang hilang pada dua kolom ini, strategi yang dipilih adalah mengganti nilai kosong dengan 0 yang berarti “tidak diketahui/tidak tersedia” daripada membuang data berharga lainnya.
+   - Juga memberikan gambaran tahun-tahun pembukaan kompetitor yang tercatat, yang bisa digunakan untuk membuat fitur baru seperti “lama persaingan”.
+   - Representasi dalam satuan bulan memungkinkan model menangkap hubungan temporal secara lebih halus dibandingkan dua kolom terpisah.
+   - Lama waktu promo berlangsung kemungkinan memengaruhi tingkat penjualan — semakin lama suatu toko berpartisipasi dalam promo, semakin besar kemungkinan pengaruhnya terhadap performa penjualan.
+   - Dengan mengekstrak informasi apakah bulan saat ini termasuk bulan promo (PromoMonth), model dapat lebih mudah memahami pengaruh musiman promosi terhadap penjualan.
+   - Dataset awal sangat besar (~730.000+ baris), yang bisa membuat proses visualisasi, eksplorasi, atau training model menjadi lambat dan berat.
+   - Agar data siap digunakan untuk encoding dan tahap selanjutnya
+
 ### Encoding
 1. Proses yang dilakukan (one-hot-encoding) :
    - One-Hot Encoding: Ubah kolom kategorikal (StateHoliday, StoreType, Assortment) jadi kolom biner (0/1).
@@ -124,10 +184,50 @@ sumber data : (Kaggle [Rossman Store Sales] : https://www.kaggle.com/datasets/pr
 2. Alasan :
    Menyamakan Skala: Fitur dengan rentang nilai yang berbeda dapat membingungkan algoritma ML. MinMaxScaler memastikan semua fitur memiliki skala yang sama.
    
-## MODELING
+##♣️ MODELING
+
+### 1. **Random Forest Regressor**
+
+**Deskripsi**:
+Random Forest adalah algoritma ensemble learning berbasis decision tree. Ia bekerja dengan membangun banyak pohon keputusan (decision trees) secara paralel, lalu menggabungkan hasilnya untuk menghasilkan prediksi yang lebih stabil dan akurat. Untuk regresi, prediksi akhir diambil dari rata-rata hasil semua pohon.
+
+**Parameter yang Digunakan**:
+
+* `n_estimators=100`: Jumlah pohon (trees) yang dibangun dalam model.
+* `random_state=123`: Nilai acak untuk memastikan hasil yang konsisten setiap kali model dijalankan.
+* `n_jobs=-1`: Menggunakan semua core CPU yang tersedia untuk mempercepat proses training.
+
+**Cara kerja**:
+
+* Setiap pohon dilatih menggunakan subset acak dari data (bootstrap sampling).
+* Fitur yang digunakan pada tiap node juga dipilih secara acak.
+* Hasil akhir prediksi diambil dari **rata-rata prediksi** seluruh pohon.
+
+---
+
+### 2. **XGBoost Regressor**
+
+**Deskripsi**:
+XGBoost (Extreme Gradient Boosting) adalah algoritma boosting yang membangun pohon keputusan secara bertahap, di mana setiap pohon baru dibentuk untuk memperbaiki kesalahan dari pohon sebelumnya. Cocok digunakan untuk data besar dengan kompleksitas tinggi.
+
+**Parameter yang Digunakan**:
+
+* `n_estimators=300`: Jumlah pohon yang dibangun secara bertahap.
+* `max_depth=4`: Maksimal kedalaman setiap pohon. Membatasi kedalaman pohon mencegah overfitting.
+* `random_state=42`: Nilai acak untuk reprodusibilitas hasil.
+* `n_jobs=-1`: Menggunakan semua core CPU yang tersedia untuk proses training.
+
+**Cara kerja**:
+
+* XGBoost menggunakan metode boosting, yang memperbaiki prediksi dengan menambahkan pohon secara bertahap.
+* Setiap pohon baru berusaha meminimalkan error dari pohon sebelumnya menggunakan metode **gradient descent**.
+* Model ini memiliki keunggulan dalam performa dan kecepatan training.
+
+
+
 **TOP Rekomendasi Penjualan Tertinggi Menggunakan XGBoost**
-1. Top 1 terbaik adalah penjualan dengan total 1.147878 pada store 567 
-2. Total Penjualan terendah adalah 0.108608 pada store  510   
+1. Top 1 terbaik adalah dengan prediksi penjualan  1.526806 pada store 247
+2. Top 1 Prediksi Penjualan terendah 0.223762 adalah pada store 310 
    
 **Terdapat pola kunci naik turunya penjualan**
 - Promo = Penjualan naik
