@@ -192,7 +192,7 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
 2. Alasan :
    Menyamakan Skala: Fitur dengan rentang nilai yang berbeda dapat membingungkan algoritma ML. MinMaxScaler memastikan semua fitur memiliki skala yang sama.
    
-##♣️ MODELING
+## ♣️ MODELING
 
 ### 1. **Random Forest Regressor**
 
