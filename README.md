@@ -99,7 +99,8 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
 
 
 ## 🎰 Data Preparation
-- Missing Values
+- Merge Data
+- Penanganan Missing Values
 - Hapus nilai 0 pada kolom sales
 - Penanganan Outliers
 - Data Cleaning (Kalkulasi kolom untuk menghasilkan kolom baru)
@@ -110,6 +111,13 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
   
 
 **Rubik Tambahan**
+### Merge Data
+1. Proses
+   - pd.merge() digunakan untuk menggabungkan train_df (data penjualan) dengan store_df (informasi toko) berdasarkan kolom Store.
+   - data.info() menampilkan struktur dataset hasil gabungan, termasuk tipe data dan jumlah nilai yang tidak null.
+2. Alasan :
+   - Agar informasi dalam dataframe lengkap dan prediksi dapat dilakukan dengan lebih akurat.
+     
 ### Missing Value 
 1. Proses 
    Metode penanganan missing values bersamaan dengan :
