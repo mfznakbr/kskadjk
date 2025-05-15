@@ -101,9 +101,9 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
 ## 🎰 Data Preparation
 - Merge Data
 - Penanganan Missing Values
-- Hapus nilai 0 pada kolom sales
-- Penanganan Outliers
-- Data Cleaning (Kalkulasi kolom untuk menghasilkan kolom baru)
+  * Hapus nilai 0 pada kolom sales
+  * Penanganan Outliers
+  * Data Cleaning (Kalkulasi kolom untuk menghasilkan kolom baru)
 - Encoding kategori fitur
 - MinMaxScaler 
 - Teknik Spliting (Train - test split)
@@ -127,19 +127,19 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
    - fungsi dropna() setelah **pengambilan sampel data.** 
 2. Alasan : Menangani missing value dengan dropna( ) secara langsung sepertinya tidak tepat untuk dataset ini, jika dipaksakan hasilnya akan seperti ini Assorment : ['a' 'c' nan], StoreType : ['a' 'd' 'c' nan] dimana kehilangan nilai b baik pada Assortment dan StoreType. Oleh karena itu, dropna() diterapkan secara selektif dan setelah proses sampling, guna meminimalkan kehilangan variasi kategori yang penting dalam analisis maupun pemodelan.
 
-### Hapus Nilai 0 Pada Kolom Sales 
+#### Hapus Nilai 0 Pada Kolom Sales 
 1. Proses :
    - Baris data yang memiliki nilai penjualan (Sales) sama dengan nol dihapus dari dataset. Ini dilakukan menggunakan teknik filtering untuk memastikan hanya data dengan transaksi penjualan yang valid yang disertakan.
 2. Alasan :
    - Nilai Sales = 0 biasanya menandakan bahwa toko sedang tutup atau tidak melakukan penjualan pada hari tersebut. Jika data ini tetap digunakan, model dapat belajar dari kondisi yang tidak mencerminkan aktivitas penjualan yang sebenarnya. Menghapusnya membantu meningkatkan akurasi dan relevansi model.
 
-### Penanganan Outliers 
+#### Penanganan Outliers 
 1. Proses :
    - Outlier pada kolom numerikal seperti Sales dan CompetitionDistance dideteksi menggunakan metode Interquartile Range (IQR). Nilai-nilai yang berada jauh di bawah atau di atas sebaran umum dihapus dari dataset.
 2. Alasan :
    - Outlier dapat mempengaruhi distribusi data dan menyebabkan model menjadi bias atau overfitting. Dengan menghapus nilai-nilai ekstrem ini, kualitas data menjadi lebih stabil dan representatif terhadap pola penjualan yang umum terjadi.
 
-### Data Cleaning
+#### Data Cleaning
 1. Proses :
    - kolom Date dipecah menjadi fitur numerik baru: Day, Month, dan Year menggunakan .dt
    - fillna(0) digunakan untuk mengisi nilai missing (NaN) pada kolom CompetitionOpenSinceYear dan CompetitionOpenSinceMonth dengan nilai 0.
