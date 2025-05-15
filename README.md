@@ -166,16 +166,8 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
 2. Alasan :
    - Model machine learning butuh data numerik, bukan kategori (seperti a, b).
    - Hindari bias ordinal (misal: anggap a=1, b=2 lebih penting padahal tidak).
-   - Biarkan model belajar pola tiap kategori secara terpisah.
-
-### Teknik Spliting
-1. Proses yang dilakukan :
-   - X = sampel.drop('Sales', axis=1) → Semua kolom kecuali Sales sebagai fitur. y = sampel['Sales'] > Kolom Sales sebagai target.
-   - Test 20%: Data uji = 20% dari total, data latih = 80%. random_state=123: Memastikan pembagian sama tiap kali di-run (reproducibility).
-2. Alasan :
-   - Mengevaluasi performa model secara objektif pada data yang belum pernah dilihat (data test).
-   - Mencegah overfitting dengan memisahkan data validasi.
-
+   - Biarkan model belajar pola tiap kategori secara terpisah.]
+     
 ### MinMaxScaller 
 1. Proses yang dilakukan.
    MinMaxScaler mengubah skala fitur agar berada dalam rentang tertentu, biasanya antara 0 dan 1. Caranya:
@@ -184,6 +176,14 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
    - Kemudian, bagi hasilnya dengan selisih antara nilai maksimum dan minimum fitur tersebut.
 2. Alasan :
    Menyamakan Skala: Fitur dengan rentang nilai yang berbeda dapat membingungkan algoritma ML. MinMaxScaler memastikan semua fitur memiliki skala yang sama.
+
+### Teknik Spliting
+1. Proses yang dilakukan :
+   - X = sampel.drop('Sales', axis=1) → Semua kolom kecuali Sales sebagai fitur. y = sampel['Sales'] > Kolom Sales sebagai target.
+   - Test 20%: Data uji = 20% dari total, data latih = 80%. random_state=123: Memastikan pembagian sama tiap kali di-run (reproducibility).
+2. Alasan :
+   - Mengevaluasi performa model secara objektif pada data yang belum pernah dilihat (data test).
+   - Mencegah overfitting dengan memisahkan data validasi.
 
 ### Convert Float ke Int
 1. Proses yang dilakukan :
