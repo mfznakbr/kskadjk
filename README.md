@@ -104,10 +104,10 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
 - Hapus nilai 0 pada kolom sales
 - Penanganan Outliers
 - Data Cleaning (Kalkulasi kolom untuk menghasilkan kolom baru)
-- Encoding
-- Teknik Spliting
+- Encoding kategori fitur
+- MinMaxScaler 
+- Teknik Spliting (Train - test split)
 - Convert Float ke Int
-- MinMaxScaller
   
 
 **Rubik Tambahan**
@@ -176,13 +176,6 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
    - Mengevaluasi performa model secara objektif pada data yang belum pernah dilihat (data test).
    - Mencegah overfitting dengan memisahkan data validasi.
 
-### Convert Float ke Int
-1. Proses yang dilakukan :
-   - Mengumpulkan kolom yang memiliki tipe data float dalam variabel kolom_yang_diubah
-   - lalu mengubahnya ke tipe data int dengan fungsi astype() dan disimpan ke dalam dataset sampel.
-2. Alasan  :
-   - Untuk mengubah float ke int agar semua data bertipe int.
-
 ### MinMaxScaller 
 1. Proses yang dilakukan.
    MinMaxScaler mengubah skala fitur agar berada dalam rentang tertentu, biasanya antara 0 dan 1. Caranya:
@@ -191,6 +184,13 @@ Untuk memahami karakteristik toko secara keseluruhan, dilakukan analisis eksplor
    - Kemudian, bagi hasilnya dengan selisih antara nilai maksimum dan minimum fitur tersebut.
 2. Alasan :
    Menyamakan Skala: Fitur dengan rentang nilai yang berbeda dapat membingungkan algoritma ML. MinMaxScaler memastikan semua fitur memiliki skala yang sama.
+
+### Convert Float ke Int
+1. Proses yang dilakukan :
+   - Mengumpulkan kolom yang memiliki tipe data float dalam variabel kolom_yang_diubah
+   - lalu mengubahnya ke tipe data int dengan fungsi astype() dan disimpan ke dalam dataset sampel.
+2. Alasan  :
+   - Untuk mengubah float ke int agar semua data bertipe int.
    
 ## ♣️ MODELING
 
